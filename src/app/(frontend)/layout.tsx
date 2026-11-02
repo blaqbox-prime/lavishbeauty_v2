@@ -1,53 +1,32 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import type { Metadata } from 'next'
-
-import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
-import React from 'react'
-
-import { AdminBar } from '@/components/AdminBar'
-import { Footer } from '@/Footer/Component'
-import { Header } from '@/Header/Component'
-import { Providers } from '@/providers'
-import { InitTheme } from '@/providers/Theme/InitTheme'
-import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
-
-import './globals.css'
-import { getServerSideURL } from '@/utilities/getURL'
-
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled } = await draftMode()
-
-  return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
-      <head>
-        <InitTheme />
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
-      </head>
-      <body>
-        <Providers>
-          <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          />
-
-          <Header />
-          {children}
-          <Footer />
-        </Providers>
-      </body>
-    </html>
-  )
-}
+import './styles.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  openGraph: mergeOpenGraph(),
-  twitter: {
-    card: 'summary_large_image',
-    creator: '@payloadcms',
-  },
+  title: 'Beauty Salon',
+  description: 'Book your beauty appointment online.',
+}
+
+export default function FrontendLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-white text-neutral-900 antialiased">
+      <header className="border-b">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <a href="/" className="text-xl font-bold">
+            Beauty Salon
+          </a>
+          <div className="flex gap-6 text-sm">
+            <a href="/services">Services</a>
+            <a href="/book">Book</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/contact">Contact</a>
+          </div>
+        </nav>
+      </header>
+      <main>{children}</main>
+      <footer className="border-t py-8 text-center text-sm text-neutral-500">
+        &copy; {new Date().getFullYear()} Beauty Salon
+      </footer>
+    </div>
+  )
 }
