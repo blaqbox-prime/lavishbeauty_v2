@@ -1,13 +1,11 @@
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
+import { AppUser } from './seedUser'
 
 export interface LoginOptions {
   page: Page
   serverURL?: string
-  user: {
-    email: string
-    password: string
-  }
+  user: AppUser
 }
 
 /**
@@ -21,7 +19,7 @@ export async function login({
   await page.goto(`${serverURL}/admin/login`)
 
   await page.fill('#field-email', user.email)
-  await page.fill('#field-password', user.password)
+  await page.fill('#field-password', user.password!)
   await page.click('button[type="submit"]')
 
   await page.waitForURL(`${serverURL}/admin`)
